@@ -1,8 +1,9 @@
-class UsersController < ApplicationController
+class Admin::UsersController < ApplicationController
+  before_filter :authenticate_user!
   # load_and_authorize_resource
   
   def index
-    @users = User.except(:id => current_user.id)
+    @users = User.all
   end
   
   def new
@@ -21,17 +22,18 @@ class UsersController < ApplicationController
   
   def edit
     @user = User.find(params[:id])
+    logger.debug @user
   end
   
   def update
     @user = User.find(params[:id])
 
-    # if params[:user][:password].blank?
-    #   params[:user].delete(:password)
-    #   if params[:user][:password_confirmation].blank?
-    #     params[:user].delete(:password_confirmation)
-    #   end
-    # end
+    if params[:user][:password].blank?
+      params[:user].delete(:password)
+      if params[:user][:password_confirmation].blank?
+        params[:user].delete(:password_confirmation)
+      end
+    end
 
     if @user.update_attributes(params[:user])
       flash[:notice] = "Successfully updated User."
@@ -48,5 +50,5 @@ class UsersController < ApplicationController
       redirect_to root_path
     end
   end
-  
+
 end

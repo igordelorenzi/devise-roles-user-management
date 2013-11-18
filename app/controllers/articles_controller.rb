@@ -1,5 +1,6 @@
 class ArticlesController < ApplicationController
   load_and_authorize_resource
+  before_filter :authenticate_user!
 
   # GET /articles
   # GET /articles.json
@@ -27,6 +28,7 @@ class ArticlesController < ApplicationController
   # GET /articles/new.json
   def new
     @article = Article.new
+    @groups = Group.all
 
     respond_to do |format|
       format.html # new.html.erb

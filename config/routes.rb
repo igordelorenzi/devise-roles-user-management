@@ -1,8 +1,13 @@
 DeviseRolesUserManagement::Application.routes.draw do
 
-  resources :articles
-
   devise_for :users
+
+  namespace :admin do
+    resources :users, except: [:show]
+  end
+
+  resources :groups
+  resources :articles
 
   root :to => "articles#index"
   
